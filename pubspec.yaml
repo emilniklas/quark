@@ -1,11 +1,9 @@
 name: quark
-version: 0.0.1
-description: An extensive testing library.
-author: Emil Persson <emil.n.persson@gmail.com> @emilniklas
-homepage: https://emilpersson.se
+version: 0.1.0
+description: Full featured testing framework
+author: Emil Persson <emil.n.persson@gmail.com>
+homepage: https://github.com/emilniklas/quark
 environment:
-  sdk: '>=1.9.0 <2.0.0'
-#dependencies:
-#  foo_bar: '>=1.0.0 <2.0.0'
-dev_dependencies:
-  unittest: any
+  sdk: ">=1.12.0 <2.0.0"
+dependencies:
+  test: any
