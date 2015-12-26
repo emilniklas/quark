@@ -2,7 +2,23 @@ library quark.test;
 
 import 'runner.dart';
 import 'package:tuple/tuple.dart';
+import 'package:reflectable/reflectable.dart';
 
+class _TestMetadata extends Reflectable {
+  const _TestMetadata() : super(
+      newInstanceCapability,
+      libraryCapability,
+      declarationsCapability,
+      subtypeQuantifyCapability,
+      instanceInvokeCapability,
+      metadataCapability,
+      reflectedTypeCapability
+  );
+}
+
+const _TestMetadata testCaseMetadata = const _TestMetadata();
+
+@testCaseMetadata
 abstract class Test {
   /// Returns an iterable with [Function]s and/or [Tuple2]s of strings and
   /// either [Iterable]s of the same types as this property or [Function].

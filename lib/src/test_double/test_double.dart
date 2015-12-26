@@ -1,5 +1,12 @@
 part of quark.test_double;
 
+class _TestDoubleMetadata extends Reflectable {
+  const _TestDoubleMetadata() : super(subtypeQuantifyCapability, reflectedTypeCapability, newInstanceCapability);
+}
+
+const _TestDoubleMetadata testDoubleMetadata = const _TestDoubleMetadata();
+
+@testDoubleMetadata
 class _TestDouble {
   Map<Invocation, Function> _storedResponses = {};
   InstanceMirror _delegate;
