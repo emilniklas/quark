@@ -1,1 +1,85 @@
 # Quark
+
+### Abstract
+
+Quark is a comprehensive testing framework, covering different styles and types of tests.
+Reflection with [Reflectable](https://pub.dartlang.org/packages/reflectable) makes test doubles,
+grouping and test definition a breeze.
+
+## Usage
+
+This package is under development, but here is an overview of a Unit Test in Quark:
+
+```dart
+// greeter.dart
+
+class Greeter {
+  final Greeting greeting;
+
+  Greeter(this.greeting);
+
+  String greet(String name) {
+    return '${greeting.phrase}, $name!';
+  }
+}
+
+// An example of a collaborator that can be mocked
+class Greeting {
+  final String phrase;
+
+  const Greeting(this.phrase);
+}
+```
+
+```dart
+// greeter_test.dart
+import 'package:quark/quark.dart';
+import 'greeter.dart';
+export 'package:quark/init.dart';
+
+class GreeterTest extends UnitTest {
+  @test itGreetsAPerson(GreetingDouble greeting) {
+    // Creation using injected test double
+    final greeter = new Greeter(greeting);
+
+    // The greeting will return "Yo"
+    when(greeting.phrase).thenReturn('Yo');
+
+    // Make the assertion
+    expect(greeter.greet('buddy'), 'Yo, buddy!');
+
+    // Verify that the phrase was fetched from the greeting.
+    verify(greeting.phrase).wasCalled();
+  }
+}
+
+// Clean test double declaration inspired by Mockito
+class GreetingDouble extends TestDouble implements Greeting {}
+```
+
+Here is what's coming up in terms of integration testing:
+
+```gherkin
+Feature: Welcome message on the home screen
+
+Scenario: Not logged in
+  Given I'm not logged in
+  When I visit the home page
+  Then I expect to see "Hello, Guest!"
+```
+
+```dart
+import 'package:quark/quark.dart';
+export 'package:quark/init.dart';
+
+class WelcomeMessageOnTheHomeScreenTest extends IntegrationTest {
+  @Given("I'm not logged in")
+  imNotLoggedIn() {}
+
+  @When("I visit the home page")
+  iVisitTheHomePage() {}
+
+  @Then("I expect to see \"(.*?)\"")
+  iExpectToSee(String message) {}
+}
+```
