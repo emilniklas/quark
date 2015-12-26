@@ -9,9 +9,18 @@ class Tokenizer {
   List<Tuple2<String, TokenType>> get _tokens => [
     const Tuple2(r'^\n', TokenType.lineBreak),
     const Tuple2(r'^[ \t]+', TokenType.whitespace),
+
     const Tuple2(r'^\bfeature\b', TokenType.featureKeyword),
+    const Tuple2(r'^\bscenario\b', TokenType.scenarioKeyword),
+    const Tuple2(r'^\bgiven\b', TokenType.givenKeyword),
+    const Tuple2(r'^\bwhen\b', TokenType.whenKeyword),
+    const Tuple2(r'^\bthen\b', TokenType.thenKeyword),
+
+    const Tuple2(r'''^(['"])(.*?)\1''', TokenType.string),
+    const Tuple2(r'^(\d+\.?\d*|\.\d+)', TokenType.number),
+
     const Tuple2(r'^\:', TokenType.colon),
-    const Tuple2(r'^[^\s]+', TokenType.colon),
+    const Tuple2(r'^[^\s]+', TokenType.word),
   ];
 
   List<Token> tokenize() {

@@ -5,7 +5,14 @@ enum TokenType {
   lineBreak,
   colon,
 
+  string,
+  number,
+
   featureKeyword,
+  scenarioKeyword,
+  givenKeyword,
+  whenKeyword,
+  thenKeyword,
 
   word,
 }
