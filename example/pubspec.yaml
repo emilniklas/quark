@@ -1,4 +1,0 @@
-name: greeter
-dev_dependencies:
-  quark:
-    path: ../
