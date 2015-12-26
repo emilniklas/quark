@@ -1,4 +1,4 @@
-library quark.test.unit;
+library quark.test.test_double;
 
 import 'package:testcase/testcase.dart';
 import 'package:quark/test_double.dart';

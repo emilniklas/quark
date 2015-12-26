@@ -74,14 +74,21 @@ const delegated = const _Delegatable();
 /// perform assertions on them. This interface specifies the assertions
 /// that can be made.
 abstract class Assertion {
-  /// Verifies that a method was called.
+  /// Verifies that the method was called.
   void wasCalled();
 
+  /// Verifies that the method was called with these arguments.
   void wasCalledWith([arg1, arg2, arg3, arg4, arg5, arg6, arg7,
   arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17]);
 
+  /// Verifies that the method was called with arguments matching
+  /// these matchers.
   void receivedArguments(positionalMatcher, [namedMatcher]);
 }
 
+/// Together with the [Verify] typedef, this getter is used to create
+/// assertions on methods on test doubles:
+///
+///     verify(object.method());
 Verify get verify => _verify;
 typedef Assertion Verify(object);

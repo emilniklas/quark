@@ -1,5 +1,4 @@
-import 'package:quark/test_double.dart';
-import 'package:quark/unit.dart';
+import 'package:quark/quark.dart';
 
 import 'greeter.dart';
 

@@ -2,10 +2,11 @@ part of quark.test_double;
 
 When get _when {
   _isCapturingInvocation = true;
-  return (_) {
+  Expectation when(_) {
     _isCapturingInvocation = false;
     return _startExpectation();
-  };
+  }
+  return when;
 }
 
 Invocation _capturedInvocation;

@@ -42,7 +42,16 @@ abstract class Test {
   ///     ];
   Iterable get tests;
 
+  setUpAll() {}
+  setUp() {}
+  tearDownAll() {}
+  tearDown() {}
+
   void run(Runner runner) {
+    runner.setUpAll(setUpAll);
+    runner.setUp(setUp);
+    runner.tearDownAll(tearDownAll);
+    runner.tearDown(tearDown);
     _runIterable(runner, tests ?? []);
   }
 
@@ -51,7 +60,7 @@ abstract class Test {
       if (item is Function) {
         _runTest(runner, item);
       } else if (item is Tuple2) {
-        _runTuple(runner, item);
+        _runTuple(runner, item as Tuple2<String, dynamic>);
       } else {
         throw new Exception('Malformed test suite');
       }

@@ -1,7 +1,12 @@
 part of quark.test_double;
 
 class _TestDoubleMetadata extends Reflectable {
-  const _TestDoubleMetadata() : super(subtypeQuantifyCapability, reflectedTypeCapability, newInstanceCapability);
+  const _TestDoubleMetadata() : super(
+      subtypeQuantifyCapability,
+      reflectedTypeCapability,
+      newInstanceCapability,
+      classifyCapability
+  );
 }
 
 const _TestDoubleMetadata testDoubleMetadata = const _TestDoubleMetadata();
@@ -25,7 +30,7 @@ class _TestDouble {
       return '${i.memberName}${i.isAccessor}${i.isGetter}${i.isSetter}${i.isMethod}';
     }
 
-    isInvocation(Invocation other) => _id(other) == _id(invocation);
+    bool isInvocation(Invocation other) => _id(other) == _id(invocation);
 
     if (_storedResponses.keys.any(isInvocation)) {
       final key = _storedResponses.keys.firstWhere(isInvocation);

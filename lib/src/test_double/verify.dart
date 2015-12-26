@@ -2,10 +2,11 @@ part of quark.test_double;
 
 Verify get _verify {
   _isCapturingInvocation = true;
-  return (_) {
+  Assertion verify(_) {
     _isCapturingInvocation = false;
     return _startAssertion();
-  };
+  }
+  return verify;
 }
 
 Assertion _startAssertion() {
