@@ -6,6 +6,8 @@ enum TokenType {
   colon,
 
   featureKeyword,
+
+  word,
 }
 
 class Token {

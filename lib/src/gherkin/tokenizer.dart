@@ -11,6 +11,7 @@ class Tokenizer {
     const Tuple2(r'^[ \t]+', TokenType.whitespace),
     const Tuple2(r'^\bfeature\b', TokenType.featureKeyword),
     const Tuple2(r'^\:', TokenType.colon),
+    const Tuple2(r'^[^\s]+', TokenType.colon),
   ];
 
   List<Token> tokenize() {

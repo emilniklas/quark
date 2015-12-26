@@ -23,5 +23,9 @@ class GherkinTokenizerTest extends TestCase {
   all_tokens() {
     expectToken('Feature', TokenType.featureKeyword);
     expectToken(':', TokenType.colon);
+    expectToken('abc', TokenType.word);
+    expectToken('Abc', TokenType.word);
+    expectToken('Åäö', TokenType.word);
+    expectToken("It's", TokenType.word);
   }
 }
