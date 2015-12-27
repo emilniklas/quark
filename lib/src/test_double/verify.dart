@@ -1,6 +1,6 @@
 part of quark.test_double;
 
-Verify get _verify {
+VerifyCallable get _verify {
   _isCapturingInvocation = true;
   Assertion verify(_) {
     _isCapturingInvocation = false;

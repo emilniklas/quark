@@ -1,6 +1,6 @@
 part of quark.test_double;
 
-When get _when {
+WhenCallable get _when {
   _isCapturingInvocation = true;
   Expectation when(_) {
     _isCapturingInvocation = false;

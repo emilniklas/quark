@@ -36,12 +36,12 @@ abstract class Expectation {
   void thenThrow(exception);
 }
 
-/// Together with the [When] typedef, this getter is used to create expectations
+/// Together with the [WhenCallable] typedef, this getter is used to create expectations
 /// on methods on test doubles:
 ///
 ///     when(object.method());
-When get when => _when;
-typedef Expectation When(object);
+WhenCallable get when => _when;
+typedef Expectation WhenCallable(object);
 
 /// If the default behaviour should be to fall through to an actual class, the
 /// test double can be assigned a delegate. This delegate must be annotated with
@@ -86,9 +86,9 @@ abstract class Assertion {
   void receivedArguments(positionalMatcher, [namedMatcher]);
 }
 
-/// Together with the [Verify] typedef, this getter is used to create
+/// Together with the [VerifyCallable] typedef, this getter is used to create
 /// assertions on methods on test doubles:
 ///
 ///     verify(object.method());
-Verify get verify => _verify;
-typedef Assertion Verify(object);
+VerifyCallable get verify => _verify;
+typedef Assertion VerifyCallable(object);
