@@ -7,14 +7,17 @@ class Tokenizer {
   Tokenizer(this.source);
 
   List<Tuple2<String, TokenType>> get _tokens => [
-    const Tuple2(r'^\n', TokenType.lineBreak),
+    const Tuple2(r'^\n', TokenType.eol),
     const Tuple2(r'^[ \t]+', TokenType.whitespace),
+    const Tuple2(r'^\#.*', TokenType.comment),
 
     const Tuple2(r'^\bfeature\b', TokenType.featureKeyword),
     const Tuple2(r'^\bscenario\b', TokenType.scenarioKeyword),
     const Tuple2(r'^\bgiven\b', TokenType.givenKeyword),
     const Tuple2(r'^\bwhen\b', TokenType.whenKeyword),
     const Tuple2(r'^\bthen\b', TokenType.thenKeyword),
+    const Tuple2(r'^\band\b', TokenType.andKeyword),
+    const Tuple2(r'^\bor\b', TokenType.orKeyword),
 
     const Tuple2(r'''^(['"])(.*?)\1''', TokenType.string),
     const Tuple2(r'^(\d+\.?\d*|\.\d+)', TokenType.number),
@@ -24,7 +27,10 @@ class Tokenizer {
   ];
 
   List<Token> tokenize() {
-    return new List<Token>.unmodifiable(_tokenize());
+    final tokens = _tokenize().toList();
+    final offset = tokens.isEmpty ? 0 : tokens.last.end;
+    tokens.add(new Token(TokenType.eof, offset, null));
+    return new List<Token>.unmodifiable(tokens);
   }
 
   Iterable<Token> _tokenize() sync* {

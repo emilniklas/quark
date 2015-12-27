@@ -12,7 +12,7 @@ class GherkinTokenizerTest extends TestCase {
 
   void expectTokens(String source, List expected) {
     final tokenizer = new Tokenizer(source);
-    expect(tokenizer.tokenize().map((t) => t.type), expected);
+    expect(tokenizer.tokenize().map((t) => t.type), expected..add(TokenType.eof));
   }
 
   void expectToken(String source, TokenType type) {
@@ -26,6 +26,10 @@ class GherkinTokenizerTest extends TestCase {
     expectToken('Given', TokenType.givenKeyword);
     expectToken('When', TokenType.whenKeyword);
     expectToken('Then', TokenType.thenKeyword);
+    expectToken('And', TokenType.andKeyword);
+    expectToken('Or', TokenType.orKeyword);
+
+    expectToken('#c', TokenType.comment);
 
     expectToken(':', TokenType.colon);
 
