@@ -92,7 +92,7 @@ abstract class IntegrationTest extends Test {
     final snippet = '''
 @${step.keyword}('${step.description}')
 $methodName() {
-  // ...
+  throw 'Unimplemented';
 }
     '''.trim();
 
