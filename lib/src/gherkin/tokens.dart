@@ -54,7 +54,7 @@ class Token {
 
   String toString() {
     return '${
-        '$type'.substring('$TokenType'.length + 1)
+        '$type'.substring(10)
     }[$offset]${
         content == '' ? '' : '<${content.replaceAll('\n', r'\n')}>'
     }';
