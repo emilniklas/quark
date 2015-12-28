@@ -1,4 +1,4 @@
 language: dart
 dart:
   - stable
-script: pub run test # && pub run test -p content-shell
+script: tool/travis.sh
