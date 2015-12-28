@@ -12,4 +12,3 @@ dependencies:
   path: ^1.3.9
 dev_dependencies:
   testcase: any
-  dart_coveralls: ^0.3.0
