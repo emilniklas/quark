@@ -8,7 +8,7 @@ grouping and test definition a breeze.
 
 ## Usage
 
-This package is under development, but here is an overview of a Unit Test in Quark:
+### Unit Testing
 
 ```dart
 // greeter.dart
@@ -57,7 +57,7 @@ class GreeterTest extends UnitTest {
 class GreetingDouble extends TestDouble implements Greeting {}
 ```
 
-Here is what's coming up in terms of integration testing:
+### Integration Testing with Gherkin Features!
 
 ```gherkin
 Feature: Welcome message on the home screen
