@@ -1,5 +1,10 @@
 # Quark
 
+[![Build Status](https://travis-ci.org/emilniklas/quark.svg?branch=master)](https://travis-ci.org/emilniklas/quark)
+[![Coverage Status](https://coveralls.io/repos/emilniklas/quark/badge.svg?branch=master&service=github)](https://coveralls.io/github/emilniklas/quark?branch=master)
+
+---
+
 ### Abstract
 
 Quark is a comprehensive testing framework, covering different styles and types of tests.
