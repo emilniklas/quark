@@ -54,15 +54,13 @@ class Parser {
     return _expect(next.isWord, reason ?? 'expected word');
   }
 
-  String readToEol() {
-    return _readToEol().join(' ');
+  Sentence readToEol() {
+    return new Sentence(new List.unmodifiable(_readToEol()));
   }
 
-  Iterable<String> _readToEol() sync* {
-    while (next.isntAnyOf([TokenType.eof, TokenType.eol])) {
-      final token = expectWord().move();
-
-      yield token.content;
+  Iterable<Token> _readToEol() sync* {
+    while (!next.isEndOfLine) {
+      yield move();
     }
     if (next.isA(TokenType.eol)) move();
   }
@@ -79,4 +77,52 @@ class ParserException implements Exception {
   ParserException(this.token, this.message);
 
   String toString() => 'ParserException: Unexpected token $token, $message';
+}
+
+class Sentence {
+  final List<Token> tokens;
+  final String _raw;
+
+  const Sentence(this.tokens) : _raw = null;
+
+  const Sentence.raw(this._raw) : tokens = null;
+
+  String get pattern {
+    if (_raw != null) return _raw
+        .replaceAllMapped(new RegExp('[^\w\s]'), ($) => r'\' + $[0]);
+    return tokens.map(_patternize).join(' ');
+  }
+
+  String get asSymbol {
+    final String normal = _raw ?? tokens
+        .where((t) => t.isWord)
+        .map((t) => t.content).join(' ');
+    return normal.toLowerCase()
+        .replaceAll(new RegExp(r'[^\w_$\s]'), '')
+        .replaceAllMapped(new RegExp(' (.)'), (m) => m[1].toUpperCase());
+  }
+
+  String get argumentList {
+    final p = new Parser(tokens.toList()..add(const Token(TokenType.eof, null, null)));
+    return () sync* {
+      while(!p.next.isEndOfFile) {
+        if (p.next.isA(TokenType.string))
+          yield 'String ${p.current.content}';
+        p.move();
+      }
+    }().join(', ');
+  }
+
+  String _patternize(Token token) {
+    if (token.isWord) return token.content;
+    if (token.isA(TokenType.string)) return r'\"(.*)\"';
+    return r'\' + token.content.split('').join(r'\');
+  }
+
+  String toString() => _raw ?? tokens.map((t) => t.content).join(' ');
+
+  bool operator ==(other) {
+    return other is Sentence
+        && other.toString() == toString();
+  }
 }

@@ -58,15 +58,57 @@ class SingleScenarioIntegrationTest extends IntegrationTest {
         feature: 'single',
         scenarios: const [
           const Scenario(
-              description: 'single',
+              description: const Sentence.raw('single'),
               steps: const [
-                const GivenStep('x'),
-                const WhenStep('y'),
-                const ThenStep('z'),
+                const GivenStep(const Sentence.raw('x')),
+                const WhenStep(const Sentence.raw('y')),
+                const ThenStep(const Sentence.raw('z')),
               ]
           )
         ]
     ));
+  }
+}
+
+abstract class ContextMixin {
+  bool externalRun = false;
+
+  @Given('external step')
+  externalStep() {
+    externalRun = true;
+  }
+}
+
+@Feature('''
+Feature: mix
+
+  Scenario: mix
+    Given external step
+''')
+class MixedInIntegrationTest extends IntegrationTest with ContextMixin {
+  void verify(MockRunner runner) {
+    expect(runner.history, [
+      'mix:>mix'
+    ]);
+    expect(externalRun, isTrue);
+  }
+}
+
+@Feature('''
+Feature: string
+  Scenario: string
+    Given string "string"
+''')
+class StringIntegrationTest extends IntegrationTest {
+  String passedIn;
+
+  @Given('string \"(.*)\"')
+  string(String string) {
+    passedIn = string;
+  }
+
+  void verify(_) {
+    expect(passedIn, 'string');
   }
 }
 
@@ -89,6 +131,20 @@ class UnitTestTest extends TestCase {
   @test
   single_scenario_test() {
     new SingleScenarioIntegrationTest()
+      ..run(runner)
+      ..verify(runner);
+  }
+
+  @test
+  mixed_in_test() {
+    new MixedInIntegrationTest()
+      ..run(runner)
+      ..verify(runner);
+  }
+
+  @test
+  string_test() {
+    new StringIntegrationTest()
       ..run(runner)
       ..verify(runner);
   }

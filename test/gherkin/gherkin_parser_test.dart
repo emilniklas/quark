@@ -74,9 +74,9 @@ class GherkinParserTest extends TestCase {
         '''),
         const Gherkin(scenarios: const [
           const Scenario(steps: const [
-            const GivenStep('x'),
-            const WhenStep('y'),
-            const ThenStep('z'),
+            const GivenStep(const Sentence.raw('x')),
+            const WhenStep(const Sentence.raw('y')),
+            const ThenStep(const Sentence.raw('z')),
           ]),
         ])
     );

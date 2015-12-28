@@ -37,7 +37,7 @@ class Gherkin {
     if (parser.next.isA(TokenType.colon))
       parser.move();
 
-    final feature = parser.readToEol().trim();
+    final feature = parser.readToEol().toString();
 
     final description = _parseDescription(parser).join('\n').trim();
 
@@ -57,7 +57,7 @@ class Gherkin {
     }
   }
 
-  static Iterable<String> _parseDescription(Parser parser) sync* {
+  static Iterable<Sentence> _parseDescription(Parser parser) sync* {
     while (parser.next.isntAnyOf([TokenType.eof, TokenType.scenarioKeyword])) {
       if (parser.next.isA(TokenType.eol)) parser.move();
       else yield parser.readToEol();
@@ -94,11 +94,11 @@ bool _equalIterables(Iterable a, Iterable b) {
 }
 
 class Scenario {
-  final String description;
+  final Sentence description;
   final List<Step> steps;
 
   const Scenario({
-    this.description: '',
+    this.description: const Sentence(const []),
     this.steps: const []
   });
 
@@ -140,7 +140,7 @@ class Scenario {
 
 abstract class Step {
   final TokenType keywordType;
-  final String description;
+  final Sentence description;
 
   String get keyword;
 
@@ -180,7 +180,7 @@ abstract class Step {
 }
 
 class GivenStep extends Step {
-  const GivenStep(String description)
+  const GivenStep(Sentence description)
       : super(TokenType.givenKeyword, description);
 
   String get keyword => 'Given';
@@ -192,7 +192,7 @@ class GivenStep extends Step {
 }
 
 class WhenStep extends Step {
-  const WhenStep(String description)
+  const WhenStep(Sentence description)
       : super(TokenType.whenKeyword, description);
 
   String get keyword => 'When';
@@ -204,7 +204,7 @@ class WhenStep extends Step {
 }
 
 class ThenStep extends Step {
-  const ThenStep(String description)
+  const ThenStep(Sentence description)
       : super(TokenType.thenKeyword, description);
 
   String get keyword => 'Then';

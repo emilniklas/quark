@@ -61,20 +61,27 @@ abstract class IntegrationTest extends Test {
 
   Iterable get _scenarios {
     return feature.scenarios.map((s) {
-      return new Tuple2(s.description, () {
+      return new Tuple2(s.description.toString(), () {
         bool failed = false;
         final failures = <String>[];
         for (final step in s.steps) {
           final sentence = '$step';
-          final tuple = _steps.firstWhere(
-              (t) => t.item1.hasMatch(sentence),
-              orElse: () => null
+          final tuples = _steps.where(
+              (t) => t.item1.hasMatch(sentence)
           );
-          if (tuple == null) {
+          if (tuples.isEmpty) {
             failures.add(_makeSnippet(step));
             failed = true;
           } else if (!failed) {
-            tuple.item2();
+            for (final tuple in tuples) {
+              final regExp = tuple.item1;
+              final match = regExp.firstMatch(sentence);
+              final groupCount = match.groupCount;
+              final indices = <int>[];
+              for (var i = 1; i <= groupCount; i++)
+                indices.add(i);
+              Function.apply(tuple.item2, match.groups(indices));
+            }
           }
         }
         if (failed) {
@@ -87,11 +94,9 @@ abstract class IntegrationTest extends Test {
   }
 
   String _makeSnippet(Step step) {
-    final methodName = step.description.toLowerCase()
-        .replaceAllMapped(new RegExp(' (.)'), (m) => m[1].toUpperCase());
     final snippet = '''
-@${step.keyword}('${step.description}')
-$methodName() {
+@${step.keyword}('${step.description.pattern}')
+${step.description.asSymbol}(${step.description.argumentList}) {
   throw 'Unimplemented';
 }
     '''.trim();
@@ -125,7 +130,7 @@ $methodName() {
   Iterable<Tuple2<RegExp, Function>> get ___steps {
     final mirror = _featureAnnotation.reflect(this);
 
-    final stepMethods = mirror.type.declarations.values
+    final stepMethods = mirror.type.instanceMembers.values
         .where((d) => d.metadata.any((o) => o is _StepMetadata));
 
     return stepMethods.map((d) => _stepMethodToStepTuple(d, mirror));
@@ -135,8 +140,9 @@ $methodName() {
       DeclarationMirror method, InstanceMirror mirror) {
     final _StepMetadata annotation = method.metadata
         .firstWhere((o) => o is _StepMetadata);
-    return new Tuple2(new RegExp('^$annotation\$'), () {
-      return mirror.invoke(method.simpleName, []);
+    return new Tuple2(new RegExp('^$annotation\$'), ([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]) {
+      final args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8].where((a) => a != null).toList();
+      return mirror.invoke(method.simpleName, args);
     });
   }
 }
@@ -147,7 +153,7 @@ class _FeatureAnnotation extends Reflectable {
       typeCapability,
       metadataCapability,
       declarationsCapability,
-      instanceInvokeCapability
+      const InvokingMetaCapability(_StepMetadata)
   );
 }
 
