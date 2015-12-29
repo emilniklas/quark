@@ -11,5 +11,19 @@ dependencies:
   reflectable: ^0.5.1
   path: ^1.3.9
 dev_dependencies:
-  testcase: any
   dart_coveralls: any
+transformers:
+- reflectable:
+    $include: test/**_test.dart
+    entry_points:
+      - test/gherkin/external_feature/external_html_test.dart
+      - test/gherkin/external_feature/external_io_test.dart
+      - test/integration_test.dart
+      - test/test_double_test.dart
+      - test/test_test.dart
+      - test/unit_test.dart
+    formatted: true
+- test/pub_serve:
+    $include: test/**_test.dart
+- $dart2js:
+    $include: test/**_test.dart

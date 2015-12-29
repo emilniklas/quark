@@ -1,26 +1,26 @@
-part of quark.test_double;
+library quark.test_double.test_double;
 
-class _TestDoubleMetadata extends Reflectable {
-  const _TestDoubleMetadata() : super(
-      subtypeQuantifyCapability,
-      reflectedTypeCapability,
-      newInstanceCapability,
-      classifyCapability
-  );
-}
+import 'metadata.dart';
+export 'metadata.dart';
 
-const _TestDoubleMetadata testDoubleMetadata = const _TestDoubleMetadata();
+import 'package:test/test.dart';
+import '../../test_double.dart' as interface show Assertion, Expectation, VerifyCallable, WhenCallable;
+import 'package:reflectable/mirrors.dart';
+import 'package:reflectable/reflectable.dart';
+
+part 'when.dart';
+part 'verify.dart';
 
 @testDoubleMetadata
-class _TestDouble {
+class TestDouble {
   Map<Invocation, Function> _storedResponses = {};
   InstanceMirror _delegate;
   List<Invocation> _history = [];
 
   noSuchMethod(Invocation invocation) {
-    if (_isCapturingInvocation) {
-      _capturedInvocationTarget = this;
-      _capturedInvocation = invocation;
+    if (isCapturingInvocation) {
+      capturedInvocationTarget = this;
+      capturedInvocation = invocation;
       return null;
     }
 

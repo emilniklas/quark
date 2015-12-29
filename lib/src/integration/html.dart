@@ -1,11 +1,12 @@
 library quark.src.integration.html;
 
 import 'integration.dart' as common;
+import 'metadata.dart';
 import 'dart:html';
 import 'package:path/path.dart' as path;
 export 'integration.dart' hide IntegrationTest;
 
-@common.integrationIo
+@integrationIoMetadata
 class BrowserIntegrationIo implements common.IntegrationIo {
   final common.IntegrationTest test;
 

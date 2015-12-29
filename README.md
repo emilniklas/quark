@@ -88,3 +88,15 @@ class WelcomeMessageOnTheHomeScreenTest extends IntegrationTest {
   iExpectToSee(String message) {}
 }
 ```
+
+## Running tests
+Quark works on all platforms. Here's how to run all the tests:
+
+```shell
+> git clone https://github.com/emilniklas/quark.git
+> cd quark
+> pub serve # Start the transformer server - for Reflectable
+
+# Then, in another tab
+> pt -p vm,dartium,content-shell && pt -p chrome,phantomjs,firefox,safari --pub-serve=8080
+```

@@ -1,23 +1,25 @@
-part of quark.test_double;
+part of quark.test_double.test_double;
 
-VerifyCallable get _verify {
-  _isCapturingInvocation = true;
+interface.VerifyCallable get verify {
+  isCapturingInvocation = true;
   Assertion verify(_) {
-    _isCapturingInvocation = false;
-    return _startAssertion();
+    isCapturingInvocation = false;
+    return new Assertion(capturedInvocationTarget, capturedInvocation);
   }
   return verify;
 }
 
-Assertion _startAssertion() {
-  return new _Assertion(_capturedInvocationTarget, _capturedInvocation);
+delegate(TestDouble double, to) {
+  final reflector = Reflectable.getInstance(Delegatable);
+  final mirror = reflector.reflect(to);
+  double._delegate = mirror;
 }
 
-class _Assertion implements Assertion {
-  final _TestDouble _target;
+class Assertion implements interface.Assertion {
+  final TestDouble _target;
   final Invocation _invocation;
 
-  _Assertion(this._target, this._invocation);
+  Assertion(this._target, this._invocation);
 
   void wasCalled() {
     final wasCalled = _target._history.any(_matching);

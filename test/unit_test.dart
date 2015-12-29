@@ -1,17 +1,15 @@
-library quark.test.unit;
+library test.unit;
 
-import 'package:testcase/testcase.dart';
-import 'package:quark/unit.dart' hide test;
-import 'package:quark/unit.dart' as quark show test;
+import 'package:test/test.dart' hide test;
+import 'package:test/test.dart' as dart_test show test;
+import 'package:quark/unit.dart';
 import 'mock_runner.dart';
 import 'package:quark/src/test/runner.dart';
-
-export 'package:testcase/init.dart';
 
 class SingleTestUnitTest extends UnitTest {
   bool testWasRun = false;
 
-  @quark.test
+  @test
   itWorks() {
     testWasRun = true;
   }
@@ -28,12 +26,12 @@ class MultiTestUnitTest extends UnitTest {
   bool firstTestWasRun = false;
   bool secondTestWasRun = false;
 
-  @quark.test
+  @test
   firstTest() {
     firstTestWasRun = true;
   }
 
-  @quark.test
+  @test
   secondTest() {
     secondTestWasRun = true;
   }
@@ -67,10 +65,10 @@ class SetUpUnitTest extends UnitTest {
     setUpCalls.add(0);
   }
 
-  @quark.test
+  @test
   a() {}
 
-  @quark.test
+  @test
   b() {}
 
   void verify(MockRunner runner) {
@@ -83,33 +81,28 @@ class SetUpUnitTest extends UnitTest {
   }
 }
 
-class UnitTestTest extends TestCase {
+main() {
   MockRunner runner;
 
-  setUp() {
+  setUp(() {
     runner = new MockRunner();
-  }
+  });
 
-  tearDown() {}
-
-  @test
-  single_test_unit_test() {
+  dart_test.test('single test unit test', () {
     new SingleTestUnitTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 
-  @test
-  multi_test_unit_test() {
+  dart_test.test('multi test unit test', () {
     new MultiTestUnitTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 
-  @test
-  set_up_unit_test() {
+  dart_test.test('set up unit test', () {
     new SetUpUnitTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 }

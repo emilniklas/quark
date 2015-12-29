@@ -1,26 +1,22 @@
-part of quark.test_double;
+part of quark.test_double.test_double;
 
-WhenCallable get _when {
-  _isCapturingInvocation = true;
+Invocation capturedInvocation;
+TestDouble capturedInvocationTarget;
+bool isCapturingInvocation = false;
+interface.WhenCallable get when {
+  isCapturingInvocation = true;
   Expectation when(_) {
-    _isCapturingInvocation = false;
-    return _startExpectation();
+    isCapturingInvocation = false;
+    return new Expectation(capturedInvocationTarget, capturedInvocation);
   }
   return when;
 }
 
-Invocation _capturedInvocation;
-_TestDouble _capturedInvocationTarget;
-bool _isCapturingInvocation = false;
-Expectation _startExpectation() {
-  return new _Expectation(_capturedInvocationTarget, _capturedInvocation);
-}
-
-class _Expectation implements Expectation {
-  final _TestDouble _target;
+class Expectation implements interface.Expectation {
+  final TestDouble _target;
   final Invocation _invocation;
 
-  _Expectation(this._target, this._invocation);
+  Expectation(this._target, this._invocation);
 
   void thenReturn(value) {
     thenRespond((_) => value);

@@ -1,14 +1,10 @@
 library quark.test.gherkin_tokenizer;
 
-import 'package:testcase/testcase.dart';
+import 'package:test/test.dart';
 import 'package:quark/src/gherkin/gherkin.dart';
 import 'package:quark/src/gherkin/tokens.dart';
-export 'package:testcase/init.dart';
 
-class GherkinTokenizerTest extends TestCase {
-  setUp() {}
-
-  tearDown() {}
+main() {
 
   void expectTokens(String source, List expected) {
     final tokenizer = new Tokenizer(source);
@@ -19,8 +15,7 @@ class GherkinTokenizerTest extends TestCase {
     expectTokens(source, [type]);
   }
 
-  @test
-  all_tokens() {
+  test('all_tokens', () {
     expectToken('Feature', TokenType.featureKeyword);
     expectToken('Scenario', TokenType.scenarioKeyword);
     expectToken('Given', TokenType.givenKeyword);
@@ -46,5 +41,5 @@ class GherkinTokenizerTest extends TestCase {
     expectToken('_.ab.c', TokenType.word);
     expectToken('Åäö', TokenType.word);
     expectToken("It's", TokenType.word);
-  }
+  });
 }

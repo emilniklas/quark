@@ -2,22 +2,16 @@ library quark.test.test;
 
 import 'dart:async';
 
+import 'package:test/test.dart';
 import 'package:quark/src/test/test.dart';
-import 'package:testcase/testcase.dart';
 import 'mock_runner.dart';
 import 'package:tuple/tuple.dart';
-
-export 'package:testcase/init.dart';
 
 class ExampleTest extends Test {
   @override List tests;
 }
 
-class TestTest extends TestCase {
-  setUp() {}
-
-  tearDown() {}
-
+main() {
   void runTests(Iterable tests) {
     final t = new ExampleTest();
     t.tests = tests;
@@ -30,17 +24,15 @@ class TestTest extends TestCase {
     });
   }
 
-  @test
-  single_top_level_test() async {
+  test('single_top_level_test', () async {
     final c = new Completer();
     runTests([
       () => c.complete()
     ]);
     await waitFor(c.future, 'Test never ran');
-  }
+  });
 
-  @test
-  multiple_top_level_tests() async {
+  test('multiple_top_level_tests', () async {
     final c = new StreamController();
     runTests([
       () => c.add(0),
@@ -53,10 +45,9 @@ class TestTest extends TestCase {
         'Not all tests ran'
     );
     expect(results, [0, 0, 0]);
-  }
+  });
 
-  @test
-  nested_tests() async {
+  test('nested_tests', () async {
     final c = new StreamController();
     runTests([
       () => c.add(0),
@@ -72,5 +63,5 @@ class TestTest extends TestCase {
         'Not all tests ran'
     );
     expect(results, [0, 0, 0, 0]);
-  }
+  });
 }

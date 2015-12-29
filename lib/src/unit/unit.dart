@@ -4,12 +4,18 @@ import '../test/test.dart';
 import 'package:reflectable/mirrors.dart';
 import '../../test_double.dart';
 import 'package:tuple/tuple.dart';
+import '../test/metadata.dart';
+import '../test_double/metadata.dart';
 
-const test = null;
+class _TestIdentifier {
+  const _TestIdentifier();
+}
+
+const test = const _TestIdentifier();
 
 abstract class UnitTest extends Test {
   List get tests => __tests ??= _tests;
-  InstanceMirror get _mirror => testCaseMetadata.reflect(this);
+  InstanceMirror get _mirror => testMetadata.reflect(this);
 
   List __tests;
 

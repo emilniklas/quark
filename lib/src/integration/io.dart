@@ -4,9 +4,10 @@ import 'integration.dart' as common;
 import 'dart:io';
 import 'dart:mirrors';
 import 'package:path/path.dart' as path;
+import 'metadata.dart';
 export 'integration.dart' hide IntegrationTest;
 
-@common.integrationIo
+@integrationIoMetadata
 class VmIntegrationIo implements common.IntegrationIo {
   final common.IntegrationTest test;
 

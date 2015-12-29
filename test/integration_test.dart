@@ -1,11 +1,9 @@
 library quark.test.integration;
 
-import 'package:testcase/testcase.dart';
+import 'package:test/test.dart';
 import 'package:quark/integration.dart';
 import 'package:quark/src/gherkin/gherkin.dart';
 import 'mock_runner.dart';
-
-export 'package:testcase/init.dart';
 
 @Feature('''
   Feature: empty
@@ -112,40 +110,34 @@ class StringIntegrationTest extends IntegrationTest {
   }
 }
 
-class UnitTestTest extends TestCase {
+main() {
   MockRunner runner;
 
-  setUp() {
+  setUp(() {
     runner = new MockRunner();
-  }
+  });
 
-  tearDown() {}
-
-  @test
-  empty_test() {
+  test('empty_test', () {
     new EmptyIntegrationTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 
-  @test
-  single_scenario_test() {
+  test('single_scenario_test', () {
     new SingleScenarioIntegrationTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 
-  @test
-  mixed_in_test() {
+  test('mixed_in_test', () {
     new MixedInIntegrationTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 
-  @test
-  string_test() {
+  test('string_test', () {
     new StringIntegrationTest()
       ..run(runner)
       ..verify(runner);
-  }
+  });
 }

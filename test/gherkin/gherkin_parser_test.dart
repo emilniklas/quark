@@ -1,16 +1,10 @@
 library quark.test.gherkin_parser;
 
-import 'package:testcase/testcase.dart';
+import 'package:test/test.dart';
 import 'package:quark/src/gherkin/gherkin.dart';
-export 'package:testcase/init.dart';
 
-class GherkinParserTest extends TestCase {
-  setUp() {}
-
-  tearDown() {}
-
-  @test
-  empty_feature() {
+main() {
+  test('empty_feature', () {
     expect(
         parse(''),
         const Gherkin()
@@ -39,20 +33,18 @@ class GherkinParserTest extends TestCase {
         '''),
         const Gherkin(feature: 'x', description: 'description')
     );
-  }
+  });
 
-  @test
-  empty_scenario() {
+  test('empty_scenario', () {
     expect(
         parse('Feature\nScenario:'),
         const Gherkin(scenarios: const [
           const Scenario(),
         ])
     );
-  }
+  });
 
-  @test
-  multiple_empty_scenarios() {
+  test('multiple_empty_scenarios', () {
     expect(
         parse('Feature\nScenario\nScenario'),
         const Gherkin(scenarios: const [
@@ -60,10 +52,9 @@ class GherkinParserTest extends TestCase {
           const Scenario(),
         ])
     );
-  }
+  });
 
-  @test
-  simple_scenario() {
+  test('simple_scenario', () {
     expect(
         parse('''
         Feature
@@ -80,5 +71,5 @@ class GherkinParserTest extends TestCase {
           ]),
         ])
     );
-  }
+  });
 }

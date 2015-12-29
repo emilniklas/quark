@@ -1,19 +1,13 @@
 library quark.test_double;
 
-import 'package:reflectable/reflectable.dart';
-import 'package:test/test.dart';
-
-part 'src/test_double/test_double.dart';
-part 'src/test_double/when.dart';
-part 'src/test_double/verify.dart';
-part 'src/test_double/delegate.dart';
+import 'src/test_double/test_double.dart' as impl;
 
 /// This is the main test double class, which seamlessly conforms to
 /// the implicit interface of any class.
 ///
 ///     class MyClassDouble extends TestDouble implements MyClass {}
 @proxy
-abstract class TestDouble extends _TestDouble {
+abstract class TestDouble extends impl.TestDouble {
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
@@ -40,7 +34,7 @@ abstract class Expectation {
 /// on methods on test doubles:
 ///
 ///     when(object.method());
-WhenCallable get when => _when;
+WhenCallable get when => impl.when;
 typedef Expectation WhenCallable(object);
 
 /// If the default behaviour should be to fall through to an actual class, the
@@ -66,9 +60,9 @@ typedef Expectation WhenCallable(object);
 ///     double.drive(); // Wroom!
 void delegate(TestDouble double, {to}) {
   if (to == null) throw new ArgumentError.notNull('to');
-  return _delegate(double, to);
+  return impl.delegate(double, to);
 }
-const delegated = const _Delegatable();
+const delegated = const impl.Delegatable();
 
 /// The [verify] function is used to capture member invocations and
 /// perform assertions on them. This interface specifies the assertions
@@ -90,5 +84,5 @@ abstract class Assertion {
 /// assertions on methods on test doubles:
 ///
 ///     verify(object.method());
-VerifyCallable get verify => _verify;
+VerifyCallable get verify => impl.verify;
 typedef Assertion VerifyCallable(object);
