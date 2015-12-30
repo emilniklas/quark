@@ -42,13 +42,13 @@ class Then extends StepMetadata {
 abstract class IntegrationTest extends Test {
   List get tests {
     return new List.unmodifiable([
-        new Tuple2('${feature.feature}:', _scenarios)
+      new Tuple2('${feature.feature}:', _scenarios)
     ]);
   }
 
   Iterable get _scenarios {
     return feature.scenarios.map((s) {
-      return new Tuple2(s.description.toString(), () {
+      return new Tuple2(s.description.toString(), () async {
         bool failed = false;
         final failures = <String>[];
         for (final step in s.steps) {
@@ -67,7 +67,7 @@ abstract class IntegrationTest extends Test {
               final indices = <int>[];
               for (var i = 1; i <= groupCount; i++)
                 indices.add(i);
-              Function.apply(tuple.item2, match.groups(indices));
+              await Function.apply(tuple.item2, match.groups(indices));
             }
           }
         }
@@ -91,6 +91,10 @@ ${step.description.asSymbol}(${step.description.argumentList}) {
     return '$snippet';
   }
 
+  void useFeature(String gherkin) {
+    __feature = parse(gherkin);
+  }
+
   Gherkin __feature;
 
   Gherkin get feature => __feature ??= _feature;
@@ -104,8 +108,8 @@ ${step.description.asSymbol}(${step.description.argumentList}) {
     if (annotation == null) return const Gherkin();
 
     final gherkin = annotation.value.endsWith('.feature')
-      ? new IntegrationIo(this).getFileContents(annotation.value)
-      : annotation.value;
+        ? new IntegrationIo(this).getFileContents(annotation.value)
+        : annotation.value;
 
     return parse(gherkin);
   }

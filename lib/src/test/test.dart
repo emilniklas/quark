@@ -33,27 +33,27 @@ abstract class Test {
   tearDownAll() {}
   tearDown() {}
 
-  void run(Runner runner) {
+  void register(Runner runner) {
     runner.setUpAll(setUpAll);
     runner.setUp(setUp);
     runner.tearDownAll(tearDownAll);
     runner.tearDown(tearDown);
-    _runIterable(runner, tests ?? []);
+    _registerIterable(runner, tests ?? []);
   }
 
-  void _runIterable(Runner runner, Iterable items) {
+  void _registerIterable(Runner runner, Iterable items) {
     for (final item in items) {
       if (item is Function) {
-        _runTest(runner, item);
+        _registerTest(runner, item);
       } else if (item is Tuple2) {
-        _runTuple(runner, item as Tuple2<String, dynamic>);
+        _registerTuple(runner, item as Tuple2<String, dynamic>);
       } else {
         throw new Exception('Malformed test suite');
       }
     }
   }
 
-  void _runTuple(Runner runner, Tuple2<String, dynamic> tuple) {
+  void _registerTuple(Runner runner, Tuple2<String, dynamic> tuple) {
     final description = tuple.item1;
     if (description is! String) {
       throw new Exception('Descriptions must be Strings');
@@ -61,17 +61,17 @@ abstract class Test {
 
     final item = tuple.item2;
     if (item is Function) {
-      _runTest(runner, item, description);
+      _registerTest(runner, item, description);
     } else if (item is Iterable) {
       runner.group(description, () {
-        _runIterable(runner, item);
+        _registerIterable(runner, item);
       });
     } else {
       throw new Exception('Malformed test suite');
     }
   }
 
-  void _runTest(Runner runner, Function test, [String description = '<no description>']) {
-    runner.test(description, test);
+  void _registerTest(Runner runner, Function test, [String description = '<no description>']) {
+    runner.test(description, () => test());
   }
 }

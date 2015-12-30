@@ -4,7 +4,7 @@ import 'package:test/test.dart' hide test;
 import 'package:test/test.dart' as dart_test show test;
 import 'package:quark/unit.dart';
 import 'mock_runner.dart';
-import 'package:quark/src/test/runner.dart';
+import 'dart:async';
 
 class SingleTestUnitTest extends UnitTest {
   bool testWasRun = false;
@@ -50,13 +50,6 @@ class SetUpUnitTest extends UnitTest {
   bool setUpAllWasCalled = false;
   final List<int> setUpCalls = [];
 
-  @override void run(Runner runner) {
-    runner.setUpAll(setUpAll);
-    (runner as MockRunner).runSetUpAll();
-    super.run(runner);
-    (runner as MockRunner).runTearDownAll();
-  }
-
   @override setUpAll() {
     setUpAllWasCalled = true;
   }
@@ -88,21 +81,26 @@ main() {
     runner = new MockRunner();
   });
 
-  dart_test.test('single test unit test', () {
-    new SingleTestUnitTest()
-      ..run(runner)
-      ..verify(runner);
+  Future run(UnitTest test) async {
+    test.register(runner);
+    await runner.run();
+  }
+
+  dart_test.test('single test unit test', () async {
+    final t = new SingleTestUnitTest();
+    await run(t);
+    t.verify(runner);
   });
 
-  dart_test.test('multi test unit test', () {
-    new MultiTestUnitTest()
-      ..run(runner)
-      ..verify(runner);
+  dart_test.test('multi test unit test', () async {
+    final t = new MultiTestUnitTest();
+    await run(t);
+    t.verify(runner);
   });
 
-  dart_test.test('set up unit test', () {
-    new SetUpUnitTest()
-      ..run(runner)
-      ..verify(runner);
+  dart_test.test('set up unit test', () async {
+    final t = new SetUpUnitTest();
+    await run(t);
+    t.verify(runner);
   });
 }

@@ -5,7 +5,7 @@ import 'src/test/runner.dart';
 import 'package:reflectable/mirrors.dart';
 import 'src/test/metadata.dart';
 
-main() {
+main() async {
   final testRunner = new DartTestRunner();
   final classes = testMetadata.libraries.values
       .expand((l) => l.declarations.values)
@@ -13,6 +13,6 @@ main() {
   for (final mirror in classes) {
     final Test instance = mirror.newInstance('', []);
     if (instance is! Test) continue;
-    instance.run(testRunner);
+    await instance.register(testRunner);
   }
 }

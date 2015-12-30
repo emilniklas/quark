@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 import 'package:quark/integration.dart';
 import 'package:quark/src/gherkin/gherkin.dart';
 import 'mock_runner.dart';
+import 'dart:async';
 
 @Feature('''
   Feature: empty
@@ -117,27 +118,32 @@ main() {
     runner = new MockRunner();
   });
 
-  test('empty_test', () {
-    new EmptyIntegrationTest()
-      ..run(runner)
-      ..verify(runner);
+  Future run(IntegrationTest test) async {
+    test.register(runner);
+    await runner.run();
+  }
+
+  test('empty_test', () async {
+    final t = new EmptyIntegrationTest();
+    await run(t);
+    t.verify(runner);
   });
 
-  test('single_scenario_test', () {
-    new SingleScenarioIntegrationTest()
-      ..run(runner)
-      ..verify(runner);
+  test('single_scenario_test', () async {
+    final t = new SingleScenarioIntegrationTest();
+    await run(t);
+    t.verify(runner);
   });
 
-  test('mixed_in_test', () {
-    new MixedInIntegrationTest()
-      ..run(runner)
-      ..verify(runner);
+  test('mixed_in_test', () async {
+    final t = new MixedInIntegrationTest();
+    await run(t);
+    t.verify(runner);
   });
 
-  test('string_test', () {
-    new StringIntegrationTest()
-      ..run(runner)
-      ..verify(runner);
+  test('string_test', () async {
+    final t = new StringIntegrationTest();
+    await run(t);
+    t.verify(runner);
   });
 }

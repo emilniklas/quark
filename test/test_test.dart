@@ -12,10 +12,12 @@ class ExampleTest extends Test {
 }
 
 main() {
-  void runTests(Iterable tests) {
+  Future runTests(Iterable tests) async {
     final t = new ExampleTest();
     t.tests = tests;
-    t.run(new MockRunner());
+    final runner = new MockRunner();
+    t.register(runner);
+    await runner.run();
   }
 
   Future waitFor(Future future, String message, {int seconds: 3}) {
@@ -26,7 +28,7 @@ main() {
 
   test('single_top_level_test', () async {
     final c = new Completer();
-    runTests([
+    await runTests([
       () => c.complete()
     ]);
     await waitFor(c.future, 'Test never ran');
@@ -34,7 +36,7 @@ main() {
 
   test('multiple_top_level_tests', () async {
     final c = new StreamController();
-    runTests([
+    await runTests([
       () => c.add(0),
       () => c.add(0),
       () => c.add(0),
@@ -49,7 +51,7 @@ main() {
 
   test('nested_tests', () async {
     final c = new StreamController();
-    runTests([
+    await runTests([
       () => c.add(0),
       new Tuple2('x', () => c.add(0)),
       new Tuple2('x', [
