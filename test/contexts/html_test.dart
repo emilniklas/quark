@@ -20,26 +20,19 @@ main() {
   Future runShouldSucceed(String gherkin) async {
     final t = new HtmlContextIntegrationTest();
     t.useFeature(gherkin);
-    await t.register(runner);
+    t.register(runner);
+    await runner.run();
   }
 
   Future runShouldFail(String gherkin, [matching]) async {
     try {
-      final completer = new Completer();
-      runZoned(() {
-        return runShouldSucceed(gherkin);
-      }, onError: completer.completeError,
-          zoneSpecification: new ZoneSpecification());
-      await completer.future.timeout(
-          const Duration(seconds: 10), onTimeout: () {
-        fail('Test did not fail');
-      });
+      await runShouldSucceed(gherkin);
+      fail('Test did not fail');
     } catch (e) {
       if (matching != null)
         expect(e, matching);
     }
   }
-
   test('see on page', () async {
     final feature = '''
       Feature
