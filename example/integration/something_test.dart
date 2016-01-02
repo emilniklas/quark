@@ -1,3 +1,5 @@
+@TestOn('vm')
+
 import 'package:quark/quark.dart';
 export 'package:quark/vm.dart';
 

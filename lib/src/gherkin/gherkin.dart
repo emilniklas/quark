@@ -154,12 +154,18 @@ abstract class Step {
 
   String toString() => '$keyword $description';
 
-  factory Step.parse(Parser parser) {
+  factory Step.parse(Parser parser, [TokenType previousStepKeyword]) {
+    if (previousStepKeyword == null) parser.expectActualStepKeyword();
+
     final keyword = parser.move();
 
     final description = parser.readToEol();
 
-    switch (keyword.type) {
+    final keywordToken = keyword.isActualStepKeyword
+      ? keyword.type
+      : previousStepKeyword;
+
+    switch (keywordToken) {
       case TokenType.givenKeyword:
         return new GivenStep(description);
       case TokenType.thenKeyword:
@@ -172,8 +178,11 @@ abstract class Step {
   }
 
   static Iterable<Step> parseMultiple(Parser parser) sync* {
+    TokenType previousStepKeyword;
     while (parser.next.isStepKeyword) {
-      yield new Step.parse(parser);
+      final step = new Step.parse(parser, previousStepKeyword);
+      previousStepKeyword = step.keywordType;
+      yield step;
       parser.movePastBlankLines();
     }
   }

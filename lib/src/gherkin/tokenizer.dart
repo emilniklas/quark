@@ -17,7 +17,7 @@ class Tokenizer {
     const Tuple2(r'^\bwhen\b', TokenType.whenKeyword),
     const Tuple2(r'^\bthen\b', TokenType.thenKeyword),
     const Tuple2(r'^\band\b', TokenType.andKeyword),
-    const Tuple2(r'^\bor\b', TokenType.orKeyword),
+    const Tuple2(r'^\bbut\b', TokenType.butKeyword),
 
     const Tuple2(r'''^(['"])(.*?)\1''', TokenType.string),
     const Tuple2(r'^(\d+\.?\d*|\.\d+)', TokenType.number),

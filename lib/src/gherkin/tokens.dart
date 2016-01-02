@@ -16,7 +16,7 @@ enum TokenType {
   whenKeyword,
   thenKeyword,
   andKeyword,
-  orKeyword,
+  butKeyword,
 
   word,
 }
@@ -62,12 +62,15 @@ class Token {
 
   bool get isEndOfFile => isA(TokenType.eof);
 
-  bool get isStepKeyword => isAnyOf([
+  bool get isStepKeyword => isActualStepKeyword || isAnyOf([
+    TokenType.andKeyword,
+    TokenType.butKeyword,
+  ]);
+
+  bool get isActualStepKeyword => isAnyOf([
     TokenType.givenKeyword,
     TokenType.whenKeyword,
     TokenType.thenKeyword,
-    TokenType.andKeyword,
-    TokenType.orKeyword,
   ]);
 
   bool get isKeyword => isStepKeyword || isAnyOf([

@@ -22,7 +22,7 @@ main() {
     expectToken('When', TokenType.whenKeyword);
     expectToken('Then', TokenType.thenKeyword);
     expectToken('And', TokenType.andKeyword);
-    expectToken('Or', TokenType.orKeyword);
+    expectToken('But', TokenType.butKeyword);
 
     expectToken('#c', TokenType.comment);
 

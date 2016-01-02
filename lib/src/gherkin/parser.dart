@@ -54,6 +54,10 @@ class Parser {
     return _expect(next.isWord, reason ?? 'expected word');
   }
 
+  Parser expectActualStepKeyword([String reason]) {
+    return _expect(next.isActualStepKeyword, reason ?? 'expected "given", "when", or "then"');
+  }
+
   Sentence readToEol() {
     return new Sentence(new List.unmodifiable(_readToEol()));
   }
