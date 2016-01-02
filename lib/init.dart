@@ -11,7 +11,7 @@ main() async {
       .expand((l) => l.declarations.values)
       .where((ClassMirror m) => m is ClassMirror && !m.isAbstract);
   for (final mirror in classes) {
-    final Test instance = mirror.newInstance('', []);
+    final instance = mirror.newInstance('', []);
     if (instance is! Test) continue;
     await instance.register(testRunner);
   }

@@ -6,14 +6,11 @@ import '../../test_double.dart';
 import 'package:tuple/tuple.dart';
 import '../test/metadata.dart';
 import '../test_double/metadata.dart';
+import '../timeline_hook_annotation_methods.dart';
+export '../timeline_hook_metadata.dart';
+export '../test/metadata.dart' show test;
 
-class _TestIdentifier {
-  const _TestIdentifier();
-}
-
-const test = const _TestIdentifier();
-
-abstract class UnitTest extends Test {
+abstract class UnitTest extends Test with TimelineHookMethods {
   List get tests => __tests ??= _tests;
   InstanceMirror get _mirror => testMetadata.reflect(this);
 

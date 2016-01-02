@@ -50,11 +50,13 @@ class SetUpUnitTest extends UnitTest {
   bool setUpAllWasCalled = false;
   final List<int> setUpCalls = [];
 
-  @override setUpAll() {
+  @beforeAll
+  setUpAll() {
     setUpAllWasCalled = true;
   }
 
-  @override setUp() {
+  @before
+  setUp() {
     setUpCalls.add(0);
   }
 

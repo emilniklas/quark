@@ -3,6 +3,7 @@ library quark.test;
 import 'runner.dart';
 import 'package:tuple/tuple.dart';
 import 'metadata.dart';
+import 'dart:async';
 
 @testMetadata
 abstract class Test {
@@ -28,17 +29,22 @@ abstract class Test {
   ///     ];
   Iterable get tests;
 
-  setUpAll() {}
-  setUp() {}
-  tearDownAll() {}
-  tearDown() {}
+  Iterable<Function> get before;
+  Iterable<Function> get beforeAll;
+  Iterable<Function> get after;
+  Iterable<Function> get afterAll;
 
   void register(Runner runner) {
-    runner.setUpAll(setUpAll);
-    runner.setUp(setUp);
-    runner.tearDownAll(tearDownAll);
-    runner.tearDown(tearDown);
+    _compundFunction(beforeAll, runner.setUpAll);
+    _compundFunction(before, runner.setUp);
+    _compundFunction(after, runner.tearDown);
+    _compundFunction(afterAll, runner.tearDownAll);
     _registerIterable(runner, tests ?? []);
+  }
+
+  void _compundFunction(Iterable<Function> functions, void callback(function())) {
+    if (functions.isEmpty) return;
+    callback(() => Future.wait(functions.map((f) async => f())));
   }
 
   void _registerIterable(Runner runner, Iterable items) {

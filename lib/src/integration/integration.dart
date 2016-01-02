@@ -7,6 +7,8 @@ import 'package:test/test.dart';
 import 'metadata.dart';
 import 'package:reflectable/mirrors.dart';
 import 'package:reflectable/reflectable.dart';
+import '../timeline_hook_annotation_methods.dart';
+export '../timeline_hook_metadata.dart';
 
 abstract class IntegrationIo {
   String getFileContents(String file);
@@ -40,7 +42,7 @@ class Then extends StepMetadata {
 }
 
 @featureMetadata
-abstract class IntegrationTest extends Test {
+abstract class IntegrationTest extends Test with TimelineHookMethods {
   List get tests {
     return new List.unmodifiable([
       new Tuple2('${feature.feature}:', _scenarios)
@@ -85,7 +87,7 @@ abstract class IntegrationTest extends Test {
     final snippet = '''
 @${step.keyword}(r'${step.description.pattern}')
 ${step.description.asSymbol}(${step.description.argumentList}) {
-  throw 'Unimplemented';
+  fail('Unimplemented');
 }
     '''.trim();
 

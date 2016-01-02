@@ -9,6 +9,10 @@ import 'package:tuple/tuple.dart';
 
 class ExampleTest extends Test {
   @override List tests;
+  @override List<Function> before = [];
+  @override List<Function> after = [];
+  @override List<Function> beforeAll = [];
+  @override List<Function> afterAll = [];
 }
 
 main() {
@@ -65,5 +69,61 @@ main() {
         'Not all tests ran'
     );
     expect(results, [0, 0, 0, 0]);
+  });
+
+  test('lifetime', () async {
+    final history = <String>[];
+    final t = new ExampleTest();
+    Function addToHistory(String identifier) {
+      return () {
+        history.add(identifier);
+      };
+    }
+
+    t.beforeAll = [
+      addToHistory('beforeAll1'),
+      addToHistory('beforeAll2'),
+    ];
+
+    t.before = [
+      addToHistory('before1'),
+      addToHistory('before2'),
+    ];
+
+    t.after = [
+      addToHistory('after1'),
+      addToHistory('after2'),
+    ];
+
+    t.afterAll = [
+      addToHistory('afterAll1'),
+      addToHistory('afterAll2'),
+    ];
+
+    t.tests = [
+      addToHistory('t1'),
+      addToHistory('t2'),
+    ];
+
+    final runner = new MockRunner();
+    t.register(runner);
+    await runner.run();
+
+    expect(history, [
+      'beforeAll1',
+      'beforeAll2',
+      'before1',
+      'before2',
+      't1',
+      'after1',
+      'after2',
+      'before1',
+      'before2',
+      't2',
+      'after1',
+      'after2',
+      'afterAll1',
+      'afterAll2',
+    ]);
   });
 }

@@ -28,7 +28,8 @@ class MockRunner implements Runner {
     _descriptionAccumulator = oldAcc;
     _toBeRunTarget = oldTarget;
     oldTarget.add(() async {
-      await Future.wait(target.map((f) async => f()));
+      for (final t in target)
+        await t();
     });
   }
 
@@ -60,7 +61,8 @@ class MockRunner implements Runner {
 
   Future run() async {
     await _setUpAll?.call();
-    await Future.wait(_toBeRun.map((f) async => f()));
+    for (final t in _toBeRun)
+      await t();
     await _tearDownAll?.call();
   }
 }
