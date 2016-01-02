@@ -6,6 +6,7 @@ import 'package:tuple/tuple.dart';
 import 'package:test/test.dart';
 import 'metadata.dart';
 import 'package:reflectable/mirrors.dart';
+import 'package:reflectable/reflectable.dart';
 
 abstract class IntegrationIo {
   String getFileContents(String file);
@@ -82,7 +83,7 @@ abstract class IntegrationTest extends Test {
 
   String _makeSnippet(Step step) {
     final snippet = '''
-@${step.keyword}('${step.description.pattern}')
+@${step.keyword}(r'${step.description.pattern}')
 ${step.description.asSymbol}(${step.description.argumentList}) {
   throw 'Unimplemented';
 }
@@ -124,17 +125,26 @@ ${step.description.asSymbol}(${step.description.argumentList}) {
     final stepMethods = mirror.type.instanceMembers.values
         .where((d) => d.metadata.any((o) => o is StepMetadata));
 
-    return stepMethods.map((d) => _stepMethodToStepTuple(d, mirror));
+    return stepMethods.expand((d) => _stepMethodToStepTuples(d, mirror)) as Iterable<Tuple2<RegExp, Function>>;
   }
 
-  Tuple2<RegExp, Function> _stepMethodToStepTuple(
-      DeclarationMirror method, InstanceMirror mirror) {
-    final StepMetadata annotation = method.metadata
-        .firstWhere((o) => o is StepMetadata);
-    return new Tuple2(new RegExp('^$annotation\$'), ([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]) {
-      final args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8].where((a) => a != null).toList();
+  Iterable<Tuple2<RegExp, Function>> _stepMethodToStepTuples(
+      DeclarationMirror method, InstanceMirror mirror) sync* {
+
+    final annotations = method.metadata.where((o) => o is StepMetadata);
+
+    dynamicInvoker([_1, _2, _3, _4, _5, _6, _7, _8]) {
+      final args = [_1, _2, _3, _4, _5, _6, _7, _8]
+          .where((a) => a != null).toList();
       return mirror.invoke(method.simpleName, args);
-    });
+    }
+
+    for (final annotation in annotations) {
+      yield new Tuple2(
+          new RegExp('^$annotation\$'),
+          dynamicInvoker
+      );
+    }
   }
 }
 

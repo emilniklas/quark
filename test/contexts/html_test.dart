@@ -33,6 +33,7 @@ main() {
         expect(e, matching);
     }
   }
+
   test('see on page', () async {
     final feature = '''
       Feature
@@ -47,4 +48,38 @@ main() {
     querySelector('body').appendText('content');
     await runShouldSucceed(feature);
   });
+
+  test('visit', () async {
+    final feature = '''
+      Feature
+        Scenario
+          When I visit "page"
+          When I go to "page"
+          When I navigate to "page"
+          When I visit page "page"
+          When I go to page "page"
+          When I navigate to page "page"
+          When I visit url "page"
+          When I go to url "page"
+          When I navigate to url "page"
+          Given I visit "page"
+          Given I go to "page"
+          Given I navigate to "page"
+          Given I visit page "page"
+          Given I go to page "page"
+          Given I navigate to page "page"
+          Given I visit url "page"
+          Given I go to url "page"
+          Given I navigate to url "page"
+    ''';
+    await runShouldFail(feature);
+    String page;
+    HtmlContext.navigator = (String navigateTo) async {
+      page = navigateTo;
+    };
+    await runShouldSucceed(feature);
+    expect(page, 'page');
+  });
 }
+
+

@@ -8,7 +8,7 @@ class FeatureMetadata extends Reflectable {
       typeCapability,
       metadataCapability,
       declarationsCapability,
-      const InvokingMetaCapability(StepMetadata)
+      const InstanceInvokeMetaCapability(StepMetadata)
   );
 }
 

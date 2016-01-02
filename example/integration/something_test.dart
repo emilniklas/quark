@@ -1,5 +1,4 @@
 import 'package:quark/quark.dart';
-export 'package:quark/init.dart';
 export 'package:quark/vm.dart';
 
 @Feature('something.feature')
