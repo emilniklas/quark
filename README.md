@@ -133,7 +133,20 @@ class WelcomeMessageOnTheHomeScreenTest extends IntegrationTest {
 If there are steps in the feature that have no implementation in the test, the test runner
 will print out snippets that can be copied into the test. Simple!
 
-## Running tests
+## Browser tests in JavaScript
+To run your tests on JavaScript platforms you need to add two transformers:
+
+```yaml
+- reflectable:
+    entry_points:
+      - test/my_first_browser_test.dart
+      - test/my_second_browser_test.dart
+      # ... add every test that doesn't have a @TestOn('vm') annotation
+- test/pub_serve:
+    $include: test/**_test.dart
+```
+
+## Running Quark's tests
 Quark works on all platforms. Here's how to run all the tests:
 
 ```shell

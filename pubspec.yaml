@@ -14,7 +14,6 @@ dev_dependencies:
   dart_coveralls: any
 transformers:
 - reflectable:
-    $include: test/**_test.dart
     entry_points:
       - test/contexts/html_test.dart
       - test/gherkin/external_feature/external_html_test.dart
@@ -24,8 +23,5 @@ transformers:
       - test/test_test.dart
       - test/unit_test.dart
       - test/timeline_hook_methods_test.dart
-    formatted: true
 - test/pub_serve:
-    $include: test/**_test.dart
-- $dart2js:
     $include: test/**_test.dart
