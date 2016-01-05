@@ -142,5 +142,5 @@ Quark works on all platforms. Here's how to run all the tests:
 > pub serve # Start the transformer server - for Reflectable
 
 # Then, in another tab
-> pt -p vm,dartium,content-shell && pt -p chrome,phantomjs,firefox,safari --pub-serve=8080
+> pub run test -p vm,dartium,content-shell && pub run test -p chrome,phantomjs,firefox,safari --pub-serve=8080
 ```
